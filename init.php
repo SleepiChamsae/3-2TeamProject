@@ -13,7 +13,9 @@ if(!$res) {
 $sql = 'DESC blog';
 $res = mysqli_query($conn, $sql);
 if(!$res) {
-    $sql = 'CREATE TABLE blog(num INT AUTO_INCREMENT PRIMARY KEY, title TEXT, contents TEXT)';
+    $sql = 'CREATE TABLE blog(num INT AUTO_INCREMENT PRIMARY KEY, title TEXT, contents TEXT
+            , user VARCHAR(20) NOT NULL, uploadDate DATE,
+            FOREIGN KEY(user) REFERENCES user(id))';
     $res = mysqli_query($conn, $sql);
 }
 
@@ -22,6 +24,6 @@ $key = 'ASDFQWER';
 
 function Encrypt()
 {
-    
+
 }
 ?>

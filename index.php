@@ -7,8 +7,8 @@ include 'db.php';
 <body>
 <table border=1>
 <?php
-//TODO: 많이 채워야 함
-for($i = 0; i < $writings; i++) {
+//TODO: 페이징 함수 만들기(인터넷을 참고하는 것이 좋을 것으로 보임)
+for($i = 0; i < $writings; $i++) {
     echo"";//TODO: 여기에 글 쓰는 코드 넣기
 }
 ?>

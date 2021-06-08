@@ -1,6 +1,9 @@
 <?php
-//TODO: [SECOND] 여기에 로그인을 안 한 상태라면 로그인 하라고 script:alter 띄우고 로그인 페이지로 넘기기
-//그게 아니면 유저를 POST나 COOKIE나 SESSION을 통해서 Finishing_writing.php에 전송하기
+session_start();
+if(!isset($_SESSION['id'])) {
+  //ERR: 로그인이 되어 있지 않습니다.
+  exit();
+}
 ?>
 
 <head>
