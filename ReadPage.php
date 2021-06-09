@@ -45,5 +45,7 @@ $Blogdata = mysqli_fetch_array($res);
         <th>내용</th><th><textarea readonly><?php $BlogData['contents'] ?></textarea></th>
       </tr>
     </table>
+
+    <!-- TODO: 수정 버튼이랑 삭제 버튼 만들기 -->
 </center>
 </body>

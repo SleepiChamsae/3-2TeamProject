@@ -13,17 +13,27 @@ if(!$res) {
 $sql = 'DESC blog';
 $res = mysqli_query($conn, $sql);
 if(!$res) {
-    $sql = 'CREATE TABLE blog(num INT AUTO_INCREMENT PRIMARY KEY, title TEXT, contents TEXT
+    $sql = 'CREATE TABLE blog(id INT AUTO_INCREMENT PRIMARY KEY, title TEXT, contents TEXT
             , user VARCHAR(20) NOT NULL, uploadDate DATE,
             FOREIGN KEY(user) REFERENCES user(id))';
     $res = mysqli_query($conn, $sql);
 }
 
-//info 페이지를 만들어야 함
+//WANT: 암호화 복호화 하기
 $key = 'ASDFQWER';
 
 function Encrypt()
 {
 
 }
+
+function checkLogin()
+{
+    session_start();
+    if(!isset($_SESSION['id'])) {
+        exit();
+        //ERR: 로그인이 안 되어 있음
+    }
+}
+//TODO: 아 디버깅 시러
 ?>

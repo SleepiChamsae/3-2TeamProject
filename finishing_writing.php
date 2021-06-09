@@ -13,7 +13,7 @@ if(!isset($_SESSION['id'])) {
     //ERR: 로그인 정보 없음 에러
 }
 
-$id = $_SESSION['id']
+$id = $_SESSION['id'];
 $title = $_POST['title'];
 $contents = $_POST['contents'];
 $date = date("Y-m-d");
