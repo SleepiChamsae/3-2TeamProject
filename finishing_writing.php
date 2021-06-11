@@ -22,6 +22,7 @@ $sql = "INSERT INTO blog VALUE('','$title','$contents','$id','$date')";
 $res = mysqli_query($conn, $sql);
 
 if(!$res) {
+    echo "또 쿼리문 잘못한거 같은데";
     //ERR: 데이터베이스에 전송 실패 에러
 }
 ?>

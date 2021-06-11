@@ -25,16 +25,10 @@ $res = mysqli_query($conn, $sql);
 $countOfWriting = mysqli_fetch_row($res)[0];
 //DEBUG_CHECK:이게 되려나?
 $maximumWritingsPerPage = 10;
-$amountOfPage = intval($countOfWriting / $maximumWritingsPerPage);
-if($amountOfPage <= 0) {
-    $amountOfPage = 1; 
-}
+$amountOfPage = intval($countOfWriting / $maximumWritingsPerPage + 1);
 
 $pagePerSection = 10;
-$amountOfSection = intval($amountOfPage / $pagePerSection);
-if($amountOfSection <= 0) {
-    $amountOfSection = 1;
-}
+$amountOfSection = intval($amountOfPage / $pagePerSection + 1);
 
 $WritingsInPage = 0;
 if($currentPage < $amountOfPage) {
@@ -65,7 +59,6 @@ if(!$res) {
     exit();
     //ERR: 위가 잘못되었거나 접속 오류거나 
 }
-//TODO: 페이징 함수 만들기(인터넷을 참고하는 것이 좋을 것으로 보임)
 while($row = mysqli_fetch_array($res)) {
     ?>
         <tr>

@@ -15,6 +15,8 @@ if(!$res) {
 $row = mysqli_fetch_array($res);
 if($row['id'] == $id && $row['pw'] == $pw) {
     echo "로그인 성공";
+    session_start();
+    $_SESSION['id'] = $row['id'];
     //세션을 이용해 로그인 상태 유지시키기
 } else {
     echo "로그인 실패";

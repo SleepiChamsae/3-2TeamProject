@@ -14,7 +14,7 @@ $sql = 'DESC blog';
 $res = mysqli_query($conn, $sql);
 if(!$res) {
     $sql = 'CREATE TABLE blog(id INT AUTO_INCREMENT PRIMARY KEY, title TEXT, contents TEXT
-            , user VARCHAR(20) NOT NULL, uploadDate DATE,
+            , user varchar(20) NOT NULL, uploadDate DATE,
             FOREIGN KEY(user) REFERENCES user(id))';
     $res = mysqli_query($conn, $sql);
 }
@@ -35,5 +35,4 @@ function checkLogin()
         //ERR: 로그인이 안 되어 있음
     }
 }
-//TODO: 아 디버깅 시러
 ?>
