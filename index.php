@@ -1,5 +1,4 @@
 <?php
-
         include 'init.php';
         /* 인덱스 함수 참고 http://blog.kurien.co.kr/529 */
         if(isset($_GET['page'])) {
@@ -78,18 +77,33 @@
     <title>블로그 알파</title>
 </head>
 <body>
+
+    <?php
+session_start();
+if(isset($_SESSION['id'])) {
+    ?>
+    <a href="./writing.php">글 쓰러 가기</a>
+    <a href="./logout.php">로그아웃</a>
+<?php
+}
+else {
+    ?>
+    <a href="./login.php">로그인</a>
+    <?php
+}
+?>
     <article>
-    <table>
-        <thead>
-            <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
             while($row = mysqli_fetch_assoc($res)) {
 
                 echo "<tr></tr><td>$row[id]</td>
@@ -98,8 +112,8 @@
                 <td>$row[uploadDate]</td></tr> ";
             }
             ?>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
     </article>
 
     <?php echo $paging?>

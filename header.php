@@ -2,12 +2,13 @@
 session_start();
 if(isset($_SESSION['id'])) {
     ?>
-    여기에 로그인 한 생태에서의 html 작성하기
+    <a href="./writing.php">글 쓰러 가기</a>
+    <a href="./logout.php">로그아웃</a>
     <?php
 }
 else {
     ?>
-    여기에 로그인 하지 않은 상태에서의 html 작성하기
+    <a href="./login.php">로그인</a>
     <?php
 }
 ?>
