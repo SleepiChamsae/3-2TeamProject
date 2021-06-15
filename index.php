@@ -1,103 +1,106 @@
 <?php
-include 'init.php';
+
+        include 'init.php';
+        /* 인덱스 함수 참고 http://blog.kurien.co.kr/529 */
+        if(isset($_GET['page'])) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+
+        $sql = "SELECT COUNT(*) AS CNT FROM BLOG ORDER BY ID DESC";
+        $res = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($res);
+
+        $allPost = $row['CNT']; //전체 글의 수
+
+        const ONE_PAGE = 15; //한 페이지당 글 수
+        $allPage = ceil($allPost / ONE_PAGE);
+
+        if($page < 1 || ($allPage && $page > $allPage)) {
+            ?>
+<!-- error message -->
+<?php
+            exit;
+        }
+
+        $oneSection = 10;
+        $currentSection = ceil($page / $oneSection);
+        
+        $allSection = ceil($allPage / $oneSection);
+        $firstPage = ($currentSection * $oneSection) - ($oneSection - 1); //현재 섹션의 처음 페이지
+
+        if($currentSection == $allSection) {
+            $lastPage = $allPage;
+        } else {
+            $lastPage = $currentSection * $oneSection;
+        }
+
+        $prevPage = (($currentSection - 1) * $oneSection);
+        $nextPage = (($currentSection + 1) * $oneSection) - ($oneSection - 1);
+
+        //no echo last one time
+        $paging = '<ul>';
+
+        if($page != 1) {
+            $paging .= '<li class="page page_start><a href="./index.php?page=1">처음</a></li>';
+        }
+        
+        if($currentSection != 1) { 
+            $paging .= '<li class="page page_prev"><a href="./index.php?page=' . $prevPage . '">이전</a></li>';
+        }
+
+        for($i = $firstPage; $i <= $lastPage; $i++) {
+            if($i == $page) {
+                $paging .= '<li class="page current">' . $i . '</li>';
+            } else {
+                $paging .= '<li class="page"><a href="./index.php?page=' . $i . '">' . $i . '</a></li>';
+            }
+        }
+
+        if($currentSection != $allSection) { 
+            $paging .= '<li class="page page_next"><a href="./index.php?page=' . $nextPage . '">다음</a></li>';
+        }
+
+        if($page != $allPage) { 
+            $paging .= '<li class="page page_end"><a href="./index.php?page=' . $allPage . '">끝</a></li>';
+        }
+        $paging .= '</ul>';
+
+        $currentLimit = (ONE_PAGE * $page) - ONE_PAGE;
+        $sqlLimit = 'limit '.$currentLimit.','.ONE_PAGE;
+        $sql = 'SELECT * FROM blog ORDER BY id DESC '. $sqlLimit;
+        $res = mysqli_query($conn, $sql);
+
 ?>
+
 <head>
-    <title>블로그</title>
+    <title>블로그 알파</title>
 </head>
 <body>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>작성일</th>
-        </tr>
-    <?php
-$currentPage = 0;
-if(isset($_POST['currentPage'])) {
-    $currentPage = $_POST['currentPage'];
-} else {
-    $currentPage = 1;
-}
-$sql = "SELECT COUNT(*) FROM blog";
-//NOTICE: 이 코드는 모든 걸 가져오기 떄문에 비 효율적임;
-$res = mysqli_query($conn, $sql);
-$countOfWriting = mysqli_fetch_row($res)[0];
-//DEBUG_CHECK:이게 되려나?
-$maximumWritingsPerPage = 10;
-$amountOfPage = intval($countOfWriting / $maximumWritingsPerPage + 1);
+    <article>
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            while($row = mysqli_fetch_assoc($res)) {
 
-$pagePerSection = 10;
-$amountOfSection = intval($amountOfPage / $pagePerSection + 1);
-
-$WritingsInPage = 0;
-if($currentPage < $amountOfPage) {
-    $WritingsInPage = $maximumWritingsPerPage;
-} else if($currentPage == $amountOfPage) {
-    $WritingsInPage = $countOfWriting % $maximumWritingsPerPage;
-} else {
-    //요청 페이지 > 총 페이지 수
-    $currentPage = $amountOfPage;
-}
-
-$sortBy = "";
-if(isset($_POST['sortBy'])) {
-    $sortBy = $_POST['sortBy'];
-} else {
-    $sortBy = "id";
-}
-
-$offset = ($currentPage - 1) * 10;
-$sql = "SELECT R1.* FROM(
-                    SELECT * FROM blog
-                    ORDER BY $sortBy ASC
-        )R1
-        LIMIT $maximumWritingsPerPage OFFSET $offset";
-$res = mysqli_query($conn, $sql);
-if(!$res) {
-    echo "님 sql 문 터짐 ㅅㄱ";
-    exit();
-    //ERR: 위가 잘못되었거나 접속 오류거나 
-}
-while($row = mysqli_fetch_array($res)) {
-    ?>
-        <tr>
-            <th><?php echo "$row[id]" ?></th>
-            <th><?php echo "$row[title]" ?></th>
-            <th><?php echo "$row[user]" ?></th>
-            <th><?php echo "$row[uploadDate]" ?></th>
-        </tr>
-        <?php
-}
-?>
+                echo "<tr></tr><td>$row[id]</td>
+                <td><a href='./ReadPage.php?id=$row[id]'>$row[title]</a></td>
+                <td>$row[user]</td>
+                <td>$row[uploadDate]</td></tr> ";
+            }
+            ?>
+        </tbody>
     </table>
-<?php 
-//TODO: Index하면 진짜 localhost/index.php?뭐시기뭐시기로 되어있네
-echo "<ul>";
-$currentSection = intval($currentPage / $pagePerSection + 1);
-    if($currentPage != 1) {
-        echo "<li><a href='/index.php?currentPage=1'>처음</a></li>";
-    }
+    </article>
 
-    $prevPage = ($currentSection - 2) * 10 + 9;
-    if($currentSection != 1) {
-        echo "<li><a href='/index.php?currentPage=$prevPage'>이전</a></li>";
-    }
-
-    for($i = 0;$i < $currentSection; $i++) {
-        $p = ($currentPage - 1) * 10 + $i;
-        echo "<li><a href='/index.php?currentPage=$p'>$p</a></li>";
-    }
-
-    $nextPage = $currentSection * 10;
-    if($currentSection != $amountOfSection) {
-        echo "<li><a href='/index.php?currentPage=$nextPage'>다음</a></li>";
-    }
-
-    if($currentPage != $amountOfPage) {
-        echo "<li><a href='/index.php?currentPage=$amountOfPage'>끝</a></li>";
-    }
-
-echo "</ul>";
-?>
+    <?php echo $paging?>
 </body>
