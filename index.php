@@ -89,8 +89,15 @@ if(isset($_SESSION['id'])) {
 else {
     ?>
     <a href="./login.php">로그인</a>
+    <a href="./register.php">회원가입</a>
     <?php
 }
+
+if($allPost == 0) {
+    echo "<br>아직 글이 존재하지 않습니다.";
+    exit();
+}
+
 ?>
     <article>
         <table>
